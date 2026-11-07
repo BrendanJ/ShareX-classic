@@ -33,24 +33,14 @@ namespace ShareX
 
         public override GitHubUpdateChecker CreateUpdateChecker()
         {
-            if (UpdateChannel == UpdateChannel.Dev)
+            // ShareX Classic checks its own releases, never upstream ShareX, so users are not offered the new UI.
+            // There is no separate dev builds repository, so the Dev channel follows pre-releases.
+            return new GitHubUpdateChecker(Links.GitHubOwner, Links.GitHubRepo)
             {
-                return new GitHubUpdateChecker("ShareX", "DevBuilds")
-                {
-                    IsDev = true,
-                    IsPortable = Program.Portable,
-                    IgnoreRevision = true
-                };
-            }
-            else
-            {
-                return new GitHubUpdateChecker("ShareX", "ShareX")
-                {
-                    IsPortable = Program.Portable,
-                    IncludePreRelease = UpdateChannel == UpdateChannel.PreRelease,
-                    IgnoreRevision = true
-                };
-            }
+                IsPortable = Program.Portable,
+                IncludePreRelease = UpdateChannel != UpdateChannel.Release,
+                IgnoreRevision = true
+            };
         }
     }
 }

@@ -1,51 +1,40 @@
-<p align="center"><a href="https://getsharex.com"><img src="https://getsharex.com/img/ShareX_Banner.png" alt="ShareX Banner"/></a></p>
+<h1 align="center">ShareX Classic</h1>
 <h3 align="center">Screen capture, file sharing and productivity tool</h3>
-<p align="center">THIS IS AN UNOFFICIAL FORK - NOT AFFILIATED WITH THE SHAREX TEAM</a></p>
+<p align="center"><b>THIS IS AN UNOFFICIAL FORK - NOT AFFILIATED WITH THE SHAREX TEAM</b></p>
 <br>
 <div align="center">
-  <a href="https://github.com/ShareX/ShareX/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/ShareX/ShareX/build.yml?branch=develop&label=Build&cacheSeconds=3600" alt="GitHub Workflow Status"/></a>
-  <a href="./LICENSE.txt"><img src="https://img.shields.io/github/license/ShareX/ShareX?label=License&color=brightgreen&cacheSeconds=3600" alt="License"/></a>
-  <a href="https://github.com/ShareX/ShareX/releases/latest"><img src="https://img.shields.io/github/v/release/ShareX/ShareX?label=Release&color=brightgreen&cacheSeconds=3600" alt="Release"/></a>
-  <a href="https://getsharex.com/downloads"><img src="https://img.shields.io/github/downloads/ShareX/ShareX/total?label=Downloads&cacheSeconds=3600" alt="Downloads"/></a>
-  <a href="https://discord.gg/ShareX"><img src="https://img.shields.io/discord/194170124859736065?label=Discord&cacheSeconds=3600" alt="Discord"/></a>
-  <a href="https://twitter.com/intent/follow?screen_name=ShareX"><img src="https://img.shields.io/twitter/follow/ShareX?cacheSeconds=3600" alt="Twitter"/></a>
+  <a href="https://github.com/BrendanJ/ShareX-classic/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/BrendanJ/ShareX-classic/build.yml?branch=classic&label=Build&cacheSeconds=3600" alt="GitHub Workflow Status"/></a>
+  <a href="./LICENSE.txt"><img src="https://img.shields.io/github/license/BrendanJ/ShareX-classic?label=License&color=brightgreen&cacheSeconds=3600" alt="License"/></a>
+  <a href="https://github.com/BrendanJ/ShareX-classic/releases/latest"><img src="https://img.shields.io/github/v/release/BrendanJ/ShareX-classic?label=Release&color=brightgreen&cacheSeconds=3600" alt="Release"/></a>
 </div>
 <br>
-<p align="center"><a href="https://getsharex.com"><img src="https://getsharex.com/img/ShareX_Screenshot.png" alt="ShareX Screenshot"/></a></p>
-<p align="center">THIS IS AN UNOFFICIAL FORK - NOT AFFILIATED WITH THE SHAREX TEAM</a></p>
 
-## Links
-* Official website: https://getsharex.com
-* GitHub: https://github.com/ShareX/ShareX
-* Changelog: https://getsharex.com/changelog
-* Privacy policy: https://getsharex.com/privacy-policy
-* Donate: https://getsharex.com/donate
-* Twitter: https://twitter.com/ShareX
-* Discord: https://discord.gg/ShareX
-* Reddit: https://www.reddit.com/r/sharex
-* Steam page: https://store.steampowered.com/app/400040/ShareX/
-* Microsoft Store page: https://apps.microsoft.com/detail/9nblggh4z1sp
+ShareX Classic continues [ShareX](https://github.com/ShareX/ShareX) from version 21.0.0, the last release before the version 22 interface redesign. The goal is a simple, clean, consistent and reliable ShareX with the interface longtime users know.
 
-## Documents
+## Differences from ShareX 21.0.0
+* **Classic image editor only.** Avalonia has been removed entirely. The WinForms image editor is the only editor, so there is no editor selection prompt. The Background remover and Image comparer tools, which were added in 21.0.0 and depended on Avalonia, are not included.
+* **.NET 10.** Built on .NET 10 (LTS), because .NET 9 reaches end of support on November 10, 2026.
+* **Updates come from this repository.** The built-in update checker looks at ShareX Classic releases, never at upstream ShareX.
+* **Drop-in replacement.** ShareX Classic uses the same install folder, settings folder (`Documents\ShareX`), history and single-instance lock as ShareX, so it picks up your existing configuration. Run only one of ShareX or ShareX Classic at a time.
+
+## Building
+1. Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10.0) or Visual Studio 2026 with the .NET desktop workload.
+2. Open `ShareX.sln` and build the `Release` configuration for `x64`.
+
+Some built-in uploaders, such as Imgur, Dropbox, Google Drive and OneDrive, need API keys that are not part of the source code. Without them, those uploaders will not work in your build. Custom uploaders and uploaders that take your own credentials are not affected.
+
+## Credits
+ShareX Classic is built on the work of the ShareX Team and its contributors. It is distributed under the same [GNU General Public License v3.0](./LICENSE.txt).
+
+## Documentation
+Most of the ShareX documentation still applies:
 * Image effects: https://getsharex.com/image-effects
 * Actions: https://getsharex.com/actions
-* Dev builds: https://getsharex.com/docs/dev-builds
 * Keybinds: https://getsharex.com/docs/keybinds
 * Scrolling screenshot: https://getsharex.com/docs/scrolling-screenshot
 * Command line arguments: https://getsharex.com/docs/command-line-arguments
-* Translation: https://getsharex.com/docs/translation
 * OCR: https://getsharex.com/docs/ocr
 * Custom uploader: https://getsharex.com/docs/custom-uploader
 * Amazon S3 guide: https://getsharex.com/docs/amazon-s3
 * Google Cloud Storage guide: https://getsharex.com/docs/google-cloud-storage
 * Cloudflare R2 guide: https://getsharex.com/docs/cloudflare-r2
-* Brand assets: https://getsharex.com/brand-assets
-
-## Star History
-<a href="https://www.star-history.com/?repos=ShareX%2FShareX&type=date&legend=bottom-right">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=ShareX/ShareX&type=date&theme=dark&legend=bottom-right" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=ShareX/ShareX&type=date&legend=bottom-right" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=ShareX/ShareX&type=date&legend=bottom-right" />
- </picture>
-</a>

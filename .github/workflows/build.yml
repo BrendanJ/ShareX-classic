@@ -1,4 +1,4 @@
-name: Build ShareX
+name: Build ShareX Classic
 
 on:
   push:
@@ -50,7 +50,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Set PLATFORM & RUNTIME_ID
         run: |
@@ -291,9 +291,6 @@ jobs:
             | Out-String
           $output = "| File | SHA256 |`r`n| --- | --- |`r`n$($checksums.Trim())"
           echo $output >> $env:GITHUB_STEP_SUMMARY
-          if ($env:GITHUB_REF.StartsWith("refs/tags/v")) {
-            $output = "**Changelog:** https://getsharex.com/changelog#$env:GITHUB_REF_NAME`r`n`r`n$output"
-          }
           echo $output
           Set-Content -Path "${{ env.RELEASE_BODY_PATH }}" -Value "$output" -NoNewline
 
@@ -324,16 +321,16 @@ jobs:
             Output/ShareX-${{ env.APP_VERSION }}-MicrosoftStore-debug-x64.appx
             Output/ShareX-${{ env.APP_VERSION }}-MicrosoftStore-debug-arm64.appx
 
+      # Creates a draft pre-release on this repository using the workflow's own token (the release job has contents: write).
+      # Publish it as a full release from the GitHub UI so the in-app update checker (releases/latest) can see it.
       - name: Release (Stable)
-        env:
-          CUSTOM_GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
-        if: env.CUSTOM_GITHUB_TOKEN != '' && startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v3
         with:
           repository: ${{ github.repository }}
-          token: ${{ env.CUSTOM_GITHUB_TOKEN }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN || github.token }}
           tag_name: ${{ github.ref_name }}
-          name: ShareX ${{ env.APP_VERSION }}
+          name: ShareX Classic ${{ env.APP_VERSION }}
           body_path: ${{ env.RELEASE_BODY_PATH }}
           draft: true
           prerelease: true
