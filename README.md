@@ -11,7 +11,7 @@
 </div>
 <br>
 <p align="center"><a href="https://getsharex.com"><img src="https://getsharex.com/img/ShareX_Screenshot.png" alt="ShareX Screenshot"/></a></p>
-<p align="center">For further information please check our <a href="https://getsharex.com">website</a></p>
+<p align="center">THIS IS AN UNOFFICIAL FORK - NOT AFFILIATED WITH THE SHAREX TEAM</a></p>
 
 ## Links
 * Official website: https://getsharex.com
