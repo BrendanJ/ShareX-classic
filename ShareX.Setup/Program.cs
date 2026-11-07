@@ -28,6 +28,7 @@ using ShareX.HelpersLib;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 
 namespace ShareX.Setup
@@ -95,12 +96,20 @@ namespace ShareX.Setup
         private static string MakeAppxPath => Path.Combine(WindowsKitsDir, "x64", "makeappx.exe");
 
         private const string InnoSetupCompilerPath = @"C:\Program Files (x86)\Inno Setup 6\ISCC.exe";
+        // Third-party tools are mirrored in this repository's "build-deps" release so builds don't depend on upstream repositories,
+        // and each file is pinned by SHA256. To update a tool, upload the new file to that release and change its version and hash here.
+        private const string BuildDependenciesURL = "https://github.com/BrendanJ/ShareX-classic/releases/download/build-deps/";
         private const string FFmpegVersion = "8.1";
-        private static string FFmpegDownloadURL => $"https://github.com/ShareX/FFmpeg/releases/download/v{FFmpegVersion}/ffmpeg-{FFmpegVersion}-win-{Platform}.zip";
+        private static string FFmpegFileName => $"ffmpeg-{FFmpegVersion}-win-{Platform}.zip";
+        private static string FFmpegSHA256 => Platform == "arm64" ?
+            "7ac6c5dbbe61037bcce97482549294238d87400d8b7b1cb559949293c3b06dd5" :
+            "1838932e32f01e0e7b65fde5ca0ebb2ab131cb6a9ff1a84025ee5b784075576c";
         private const string RecorderDevicesVersion = "0.12.10";
-        private static string RecorderDevicesDownloadURL = $"https://github.com/ShareX/RecorderDevices/releases/download/v{RecorderDevicesVersion}/recorder-devices-{RecorderDevicesVersion}-setup.exe";
-        private const string ExifToolVersion = "13.29";
-        private static string ExifToolDownloadURL = $"https://github.com/ShareX/ExifTool/releases/download/v{ExifToolVersion}/exiftool-{ExifToolVersion}-win64.zip";
+        private const string RecorderDevicesSHA256 = "aef431742e22e2e933d7ce505842d307f4091a8421576a3325ae737692808721";
+        // Official ExifTool Windows package from exiftool.org, unmodified. The x64 build is used on ARM64 too.
+        private const string ExifToolVersion = "13.61";
+        private static string ExifToolFileName => $"exiftool-{ExifToolVersion}_64.zip";
+        private const string ExifToolSHA256 = "ab75b37515385a753aa60a58f68ffffe1ff81e43b319df9540978fb19e0580e5";
 
         private static void Main(string[] args)
         {
@@ -447,15 +456,42 @@ namespace ShareX.Setup
             CreateChecksumFile(archivePath);
         }
 
+        private static string DownloadBuildDependency(string fileName, string expectedSHA256)
+        {
+            string url = BuildDependenciesURL + fileName;
+            string filePath = Path.Combine(OutputDir, fileName);
+
+            Console.WriteLine("Downloading: " + url);
+            WebHelpers.DownloadFileAsync(url, filePath).GetAwaiter().GetResult();
+
+            // DownloadFileAsync does not throw on HTTP errors, so a missing file means the download failed.
+            if (!File.Exists(filePath))
+            {
+                throw new FileNotFoundException("Download failed: " + url, filePath);
+            }
+
+            string actualSHA256;
+
+            using (FileStream fileStream = File.OpenRead(filePath))
+            {
+                actualSHA256 = Convert.ToHexString(SHA256.HashData(fileStream));
+            }
+
+            if (!actualSHA256.Equals(expectedSHA256, StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidDataException($"SHA256 mismatch for {fileName}. Expected: {expectedSHA256}, actual: {actualSHA256}");
+            }
+
+            Console.WriteLine("Verified SHA256: " + fileName);
+
+            return filePath;
+        }
+
         private static void DownloadFFmpeg()
         {
             if (!File.Exists(FFmpegPath))
             {
-                string fileName = Path.GetFileName(FFmpegDownloadURL);
-                string filePath = Path.Combine(OutputDir, fileName);
-
-                Console.WriteLine("Downloading: " + FFmpegDownloadURL);
-                WebHelpers.DownloadFileAsync(FFmpegDownloadURL, filePath).GetAwaiter().GetResult();
+                string filePath = DownloadBuildDependency(FFmpegFileName, FFmpegSHA256);
 
                 Console.WriteLine("Extracting: " + filePath);
                 ZipManager.Extract(filePath, OutputDir, false, entry => entry.Name.Equals("ffmpeg.exe", StringComparison.OrdinalIgnoreCase));
@@ -466,11 +502,7 @@ namespace ShareX.Setup
         {
             if (!File.Exists(RecorderDevicesSetupPath))
             {
-                string fileName = Path.GetFileName(RecorderDevicesDownloadURL);
-                string filePath = Path.Combine(OutputDir, fileName);
-
-                Console.WriteLine("Downloading: " + RecorderDevicesDownloadURL);
-                WebHelpers.DownloadFileAsync(RecorderDevicesDownloadURL, filePath).GetAwaiter().GetResult();
+                DownloadBuildDependency(Path.GetFileName(RecorderDevicesSetupPath), RecorderDevicesSHA256);
             }
         }
 
@@ -478,14 +510,17 @@ namespace ShareX.Setup
         {
             if (!File.Exists(ExifToolPath))
             {
-                string fileName = Path.GetFileName(ExifToolDownloadURL);
-                string filePath = Path.Combine(OutputDir, fileName);
-
-                Console.WriteLine("Downloading: " + ExifToolDownloadURL);
-                WebHelpers.DownloadFileAsync(ExifToolDownloadURL, filePath).GetAwaiter().GetResult();
+                string filePath = DownloadBuildDependency(ExifToolFileName, ExifToolSHA256);
 
                 Console.WriteLine("Extracting: " + filePath);
                 ZipManager.Extract(filePath, OutputDir);
+
+                // The official package contains "exiftool-<version>_64\exiftool(-k).exe" and "exiftool_files".
+                // Renaming the exe to exiftool.exe makes it run as a normal command-line tool, which is the layout ShareX expects.
+                string extractedFolder = Path.Combine(OutputDir, Path.GetFileNameWithoutExtension(ExifToolFileName));
+                File.Move(Path.Combine(extractedFolder, "exiftool(-k).exe"), ExifToolPath);
+                Directory.Move(Path.Combine(extractedFolder, "exiftool_files"), Path.Combine(OutputDir, "exiftool_files"));
+                Directory.Delete(extractedFolder, true);
             }
         }
 
