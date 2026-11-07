@@ -23,10 +23,8 @@
 
 #endregion License Information (GPL v3)
 
-using Avalonia.Win32.Interoperability;
 using ShareX.HelpersLib;
 using ShareX.HistoryLib;
-using ShareX.ImageEditor.Hosting;
 using ShareX.Properties;
 using ShareX.UploadersLib;
 using System;
@@ -48,7 +46,10 @@ namespace ShareX
 {
     internal static class Program
     {
+        // AppName, MutexName and PipeName must stay identical to official ShareX so ShareX Classic is a drop-in replacement:
+        // same settings folder, same single-instance lock and same startup/shell integration entries.
         public const string AppName = "ShareX";
+        public const string DisplayName = "ShareX Classic";
         public const string MutexName = "82E6AC09-0FEF-4390-AD9F-0DD3F5561EFC";
         public static readonly string PipeName = $"{Environment.MachineName}-{Environment.UserName}-{AppName}";
 
@@ -84,7 +85,7 @@ namespace ShareX
         {
             get
             {
-                string title = $"{AppName} {VersionText}";
+                string title = $"{DisplayName} {VersionText}";
 
                 if (Settings != null && Settings.DevMode)
                 {
@@ -111,7 +112,7 @@ namespace ShareX
                     return Title;
                 }
 
-                return AppName;
+                return DisplayName;
             }
         }
 
@@ -260,7 +261,6 @@ namespace ShareX
         }
 
         public static string ImageEffectsFolder => Path.Combine(PersonalFolder, "ImageEffects");
-        public static string ModelsFolder => Path.Combine(PersonalFolder, "Models");
 
         private static string PersonalPathDetectionMethod;
 
@@ -352,11 +352,6 @@ namespace ShareX
             RegisterExtensions();
             CheckPuushMode();
             DebugWriteFlags();
-
-            DebugHelper.WriteLine("Avalonia init started.");
-            Application.AddMessageFilter(new WinFormsAvaloniaMessageFilter());
-            AvaloniaIntegration.Initialize();
-            DebugHelper.WriteLine("Avalonia init finished.");
 
             SettingManager.LoadInitialSettings();
 

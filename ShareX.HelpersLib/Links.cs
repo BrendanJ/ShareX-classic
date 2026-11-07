@@ -29,7 +29,7 @@ namespace ShareX.HelpersLib
     {
         public const string Website = "https://getsharex.com";
         public const string Callback = Website + "/callback/";
-        public const string Changelog = Website + "/changelog";
+        public const string Changelog = GitHub + "/releases";
         public const string Donate = Website + "/donate";
         public const string PrivacyPolicy = Website + "/privacy-policy";
         public const string ImageEffects = Website + "/image-effects";
@@ -40,7 +40,9 @@ namespace ShareX.HelpersLib
         public const string DocsOCR = Docs + "/ocr";
         public const string DocsScrollingScreenshot = Docs + "/scrolling-screenshot";
 
-        public const string GitHub = "https://github.com/ShareX/ShareX";
+        public const string GitHubOwner = "BrendanJ";
+        public const string GitHubRepo = "ShareX-classic";
+        public const string GitHub = "https://github.com/" + GitHubOwner + "/" + GitHubRepo;
         public const string GitHubIssues = GitHub + "/issues?q=is%3Aissue";
         public const string Jaex = "https://github.com/Jaex";
         public const string McoreD = "https://github.com/McoreD";

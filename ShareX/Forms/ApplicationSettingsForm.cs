@@ -118,11 +118,13 @@ namespace ShareX
             cbTrayLeftClickAction.SelectedIndex = (int)Program.Settings.TrayLeftClickAction;
             cbTrayMiddleClickAction.SelectedIndex = (int)Program.Settings.TrayMiddleClickAction;
 
+            // ShareX Classic does not publish separate dev builds.
+            btnCheckDevBuild.Visible = false;
+
 #if STEAM || MicrosoftStore
             cbAutoCheckUpdate.Visible = false;
             lblUpdateChannel.Visible = false;
             cbUpdateChannel.Visible = false;
-            btnCheckDevBuild.Visible = false;
 #else
             if (SystemOptions.DisableUpdateCheck)
             {

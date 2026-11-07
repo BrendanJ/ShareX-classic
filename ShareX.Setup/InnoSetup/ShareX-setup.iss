@@ -1,4 +1,6 @@
 #define MyAppName "ShareX"
+; MyAppName stays "ShareX" so install folder, shortcuts and shell entries replace official ShareX (drop-in replacement).
+#define MyAppDisplayName "ShareX Classic"
 #ifndef Platform
   #define Platform "x64"
 #endif
@@ -16,17 +18,17 @@
 #define MyAppFilePath MyAppReleaseDirectory + "\" + MyAppFileName
 #define MyAppVersion GetStringFileInfo(MyAppFilePath, "ProductVersion")
 #define MyAppPublisher "ShareX Team"
-#define MyAppURL "https://getsharex.com"
+#define MyAppURL "https://github.com/BrendanJ/ShareX-classic"
 #define MyAppId "82E6AC09-0FEF-4390-AD9F-0DD3F5561EFC"
 
 [Setup]
 AppCopyright=Copyright (c) 2007-2026 ShareX Team
 AppId={#MyAppId}
 AppMutex={#MyAppId}
-AppName={#MyAppName}
+AppName={#MyAppDisplayName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
-AppVerName={#MyAppName} {#MyAppVersion}
+AppVerName={#MyAppDisplayName} {#MyAppVersion}
 AppVersion={#MyAppVersion}
 ArchitecturesAllowed={#MyArchitecturesAllowed}
 ArchitecturesInstallIn64BitMode={#MyArchitecturesAllowed}
@@ -40,7 +42,7 @@ OutputDir={#MyAppOutputDirectory}
 PrivilegesRequired=none
 SolidCompression=yes
 UninstallDisplayIcon={app}\{#MyAppFileName}
-UninstallDisplayName={#MyAppName}
+UninstallDisplayName={#MyAppDisplayName}
 VersionInfoCompany={#MyAppPublisher}
 VersionInfoTextVersion={#MyAppVersion}
 VersionInfoVersion={#MyAppVersion}

@@ -1322,7 +1322,4 @@ Soll sie heruntergeladen und installiert werden?</value>
   <data name="AfterCaptureTasks_CopyFolderPathToClipboard" xml:space="preserve">
     <value>Ordnerpfad in die Zwischenablage kopieren</value>
   </data>
-  <data name="HotkeyType_ImageComparer" xml:space="preserve">
-    <value>Bildvergleich</value>
-  </data>
 </root>
