@@ -1,5 +1,6 @@
 <p align="center"><a href="https://getsharex.com"><img src="https://getsharex.com/img/ShareX_Banner.png" alt="ShareX Banner"/></a></p>
 <h3 align="center">Screen capture, file sharing and productivity tool</h3>
+<p align="center">THIS IS AN UNOFFICIAL FORK - NOT AFFILIATED WITH THE SHAREX TEAM</a></p>
 <br>
 <div align="center">
   <a href="https://github.com/ShareX/ShareX/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/ShareX/ShareX/build.yml?branch=develop&label=Build&cacheSeconds=3600" alt="GitHub Workflow Status"/></a>
