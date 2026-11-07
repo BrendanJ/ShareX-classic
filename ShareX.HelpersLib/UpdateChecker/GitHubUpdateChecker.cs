@@ -26,6 +26,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 
@@ -131,7 +132,9 @@ namespace ShareX.HelpersLib
 
                 if (releases != null && releases.Count > 0)
                 {
-                    latestRelease = releases[0];
+                    // Only version tags ("v21.0.1") are app releases. Skip others, such as the "build-deps" pre-release.
+                    latestRelease = releases.FirstOrDefault(x => !string.IsNullOrEmpty(x.tag_name) && x.tag_name.Length > 1 && x.tag_name[0] == 'v' &&
+                        char.IsDigit(x.tag_name[1]));
                 }
             }
             else
